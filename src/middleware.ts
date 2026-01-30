@@ -1,0 +1,37 @@
+import { NextRequest, NextResponse } from 'next/server';
+
+export const config = {
+    matcher: '/admin/:path*',
+};
+
+export function middleware(req: NextRequest) {
+    const basicAuth = req.headers.get('authorization');
+    const url = req.nextUrl;
+
+    if (process.env.NODE_ENV === 'development' && !process.env.ADMIN_PASSWORD) {
+        // Skip auth in dev if no password set, but we set one locally so this is fallback
+        return NextResponse.next();
+    }
+
+    if (basicAuth) {
+        const authValue = basicAuth.split(' ')[1];
+        const [user, pwd] = atob(authValue).split(':');
+
+        // Default username is 'admin', password comes from env
+        const validUser = 'admin';
+        const validPass = process.env.ADMIN_PASSWORD || 'password123';
+
+        if (user === validUser && pwd === validPass) {
+            return NextResponse.next();
+        }
+    }
+
+    url.pathname = '/api/auth';
+
+    return new NextResponse('Auth Required', {
+        status: 401,
+        headers: {
+            'WWW-Authenticate': 'Basic realm="Secure Area"',
+        },
+    });
+}
