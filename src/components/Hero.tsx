@@ -13,7 +13,7 @@ const Hero = () => {
                 <div className={styles.mascotContainer}>
                     <div className={styles.glowEffect}></div>
                     <Image
-                        src="/hyrdev_mascot.png"
+                        src="/hyrdev_globe.png"
                         alt="Hyrdev Global Connectivity"
                         fill
                         className="object-contain"
