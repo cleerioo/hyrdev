@@ -1,0 +1,105 @@
+.section {
+    padding: 6rem 1rem;
+    background: radial-gradient(circle at top center, rgba(30, 41, 59, 0.3) 0%, transparent 70%);
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #fff, #94a3b8);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    color: #94a3b8;
+    font-size: 1.1rem;
+}
+
+.form {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    padding: 2rem;
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.label {
+    color: #e2e8f0;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.input,
+.textarea,
+.select {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background: rgba(30, 41, 59, 0.8);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.textarea {
+    resize: vertical;
+}
+
+.button {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(to right, #3b82f6, #2563eb);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.button:hover {
+    opacity: 0.9;
+}
