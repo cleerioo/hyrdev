@@ -13,10 +13,10 @@ const Hero = () => {
                 <div className={styles.mascotContainer}>
                     <div className={styles.glowEffect}></div>
                     <Image
-                        src="/hyrdev_globe.png"
+                        src="/hyrdev_globe_transparent.png"
                         alt="Hyrdev Global Connectivity"
                         fill
-                        className="object-contain mix-blend-screen"
+                        className="object-contain"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         priority
                     />
