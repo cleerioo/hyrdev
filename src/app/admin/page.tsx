@@ -1,14 +1,18 @@
 import Link from 'next/link';
 import { clsx } from 'clsx';
+import { sql } from '@vercel/postgres';
 
-// Mock data for now since we don't have a DB connection yet
-const TEST_INQUIRIES = [
-    { id: 1, name: 'Alice Johnson', email: 'alice@example.com', service: 'website', message: 'I need a new website for my bakery.', date: '2023-10-27' },
-    { id: 2, name: 'Bob Smith', email: 'bob@tech.com', service: 'ecommerce', message: 'Looking for a Shopify alternative.', date: '2023-10-26' },
-    { id: 3, name: 'Charlie Davis', email: 'charlie@consulting.com', service: 'redesign', message: 'My current site is too slow.', date: '2023-10-25' },
-];
+// Ensure the page is never cached so we always see new entries
+export const dynamic = 'force-dynamic';
 
-export default function AdminDashboard() {
+async function getInquiries() {
+    const { rows } = await sql`SELECT * FROM inquiries ORDER BY date DESC`;
+    return rows;
+}
+
+export default async function AdminDashboard() {
+    const inquiries = await getInquiries();
+
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100 p-8">
             <div className="max-w-6xl mx-auto">
@@ -25,7 +29,7 @@ export default function AdminDashboard() {
                     <div className="p-6 border-b border-slate-800">
                         <h2 className="text-xl font-semibold">Recent Inquiries</h2>
                         <p className="text-slate-400 text-sm mt-1">
-                            (Showing mock data - Database not connected yet)
+                            (Live Data from Vercel Postgres)
                         </p>
                     </div>
 
@@ -37,37 +41,42 @@ export default function AdminDashboard() {
                                     <th className="px-6 py-4">Name</th>
                                     <th className="px-6 py-4">Service</th>
                                     <th className="px-6 py-4">Message</th>
-                                    <th className="px-6 py-4">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-800">
-                                {TEST_INQUIRIES.map((inquiry) => (
-                                    <tr key={inquiry.id} className="hover:bg-slate-800/50 transition-colors">
-                                        <td className="px-6 py-4 text-slate-400 whitespace-nowrap">{inquiry.date}</td>
-                                        <td className="px-6 py-4">
-                                            <div className="font-medium text-white">{inquiry.name}</div>
-                                            <div className="text-sm text-slate-500">{inquiry.email}</div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <span className={clsx(
-                                                "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
-                                                inquiry.service === 'website' && "bg-blue-900/50 text-blue-400",
-                                                inquiry.service === 'ecommerce' && "bg-purple-900/50 text-purple-400",
-                                                inquiry.service === 'redesign' && "bg-emerald-900/50 text-emerald-400",
-                                            )}>
-                                                {inquiry.service}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 text-slate-300 max-w-md truncate">
-                                            {inquiry.message}
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <button className="text-red-400 hover:text-red-300 text-sm font-medium">
-                                                Delete
-                                            </button>
+                                {inquiries.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={4} className="px-6 py-8 text-center text-slate-500">
+                                            No inquiries yet.
                                         </td>
                                     </tr>
-                                ))}
+                                ) : (
+                                    inquiries.map((inquiry) => (
+                                        <tr key={inquiry.id} className="hover:bg-slate-800/50 transition-colors">
+                                            <td className="px-6 py-4 text-slate-400 whitespace-nowrap">
+                                                {new Date(inquiry.date).toLocaleDateString()}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="font-medium text-white">{inquiry.name}</div>
+                                                <div className="text-sm text-slate-500">{inquiry.email}</div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <span className={clsx(
+                                                    "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
+                                                    inquiry.service === 'website' && "bg-blue-900/50 text-blue-400",
+                                                    inquiry.service === 'ecommerce' && "bg-purple-900/50 text-purple-400",
+                                                    inquiry.service === 'redesign' && "bg-emerald-900/50 text-emerald-400",
+                                                    inquiry.service === 'other' && "bg-slate-700 text-slate-300",
+                                                )}>
+                                                    {inquiry.service}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4 text-slate-300 max-w-md truncate">
+                                                {inquiry.message}
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
                     </div>

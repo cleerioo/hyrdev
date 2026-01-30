@@ -1,6 +1,8 @@
 'use server';
 
 import { z } from 'zod';
+import { sql } from '@vercel/postgres';
+import { revalidatePath } from 'next/cache';
 
 const schema = z.object({
     name: z.string().min(1),
@@ -22,12 +24,20 @@ export async function submitInquiry(formData: FormData) {
         return { error: 'Invalid fields' };
     }
 
-    // MOCK: Simulate database delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const { name, email, service, message } = validatedFields.data;
 
-    console.log('--- NEW INQUIRY RECEIVED (MOCK) ---');
-    console.log(validatedFields.data);
-    console.log('-----------------------------------');
+    try {
+        await sql`
+      INSERT INTO inquiries (name, email, service, message)
+      VALUES (${name}, ${email}, ${service}, ${message})
+    `;
 
-    return { success: true };
+        // Refresh the admin dashboard so the new entry shows up immediately
+        revalidatePath('/admin');
+
+        return { success: true };
+    } catch (error) {
+        console.error('Database Error:', error);
+        return { error: 'Failed to submit inquiry.' };
+    }
 }
