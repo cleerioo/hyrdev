@@ -1,0 +1,61 @@
+.section {
+    padding: 8rem 0;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+}
+
+.chevron {
+    color: var(--accent-red);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.heading {
+    font-size: 1.875rem;
+    font-weight: 700;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.card {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.quote {
+    font-size: 1.125rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.625;
+}
+
+.author {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.role {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
