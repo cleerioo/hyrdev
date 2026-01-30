@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import Starfield from '@/components/Starfield';
+import WhatsAppButton from '@/components/WhatsAppButton';
 import styles from './layout.module.css';
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({
         <main className={styles.main}>
           {children}
         </main>
+        <WhatsAppButton />
       </body>
     </html>
   );
